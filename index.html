@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Geography of Taste — Michelin Guide</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css">
+</head>
+<body>
+
+<!-- ─── LOADING OVERLAY ─── -->
+<div id="loading-overlay">
+  <div class="loading-badge">M</div>
+  <span class="loading-text">Loading restaurant data…</span>
+  <div class="loading-bar"><div class="loading-bar-fill" id="loading-progress"></div></div>
+</div>
+
+<!-- ─── STICKY NAV ─── -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="nav-badge">M</div>
+    <span class="nav-title">Geography of Taste</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" data-target="section-map">The Map</button>
+    <button class="nav-link" data-target="section-choropleth">The Bias</button>
+    <button class="nav-link" data-target="section-beeswarm">Price vs. Stars</button>
+    <button class="nav-link" data-target="section-blank">Blank Spots</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
+<section id="hero">
+  <div class="michelin-badge-hero">M</div>
+  <p class="hero-eyebrow">An Interactive Essay · Michelin Guide Data</p>
+  <h1 class="hero-title">
+    A French Tire Company<br>
+    <em>Decides What the World Eats Well</em>
+  </h1>
+  <p class="hero-sub">
+    Since 1900, the Michelin Guide has been the world's most influential restaurant authority.
+    But its map of "excellence" reveals as much about geography and history as it does about food.
+  </p>
+  <p class="hero-founded">Founded Paris, France — 1900 · Now covering 45 territories</p>
+  <div class="hero-stats">
+    <div class="h-stat"><span class="n">19,036</span><span class="l">Total Listings</span></div>
+    <div class="h-stat"><span class="n">157</span><span class="l">3-Star Restaurants</span></div>
+    <div class="h-stat"><span class="n">45</span><span class="l">Countries Covered</span></div>
+    <div class="h-stat"><span class="n">150+</span><span class="l">Countries Ignored</span></div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ SECTION 1 — MAP ══════════════════════════════════ -->
+<section id="section-map">
+  <div class="section-header fade-in-up">
+    <p class="section-tag">01 — The Full Picture</p>
+    <h2 class="section-title">19,036 Restaurants.<br><em>Half the World, Missing.</em></h2>
+    <p class="section-desc">
+      Every dot is a Michelin-listed restaurant. Zoom in, filter by award tier,
+      and notice what's absent: entire continents with almost nothing.
+    </p>
+  </div>
+  <div id="map-wrap">
+    <div id="map"></div>
+    <div id="map-controls">
+      <div class="map-pill active" data-award="3 Stars"><div class="map-pill-dot" style="background:#FFD700;box-shadow:0 0 5px #FFD700"></div>3 Stars</div>
+      <div class="map-pill active" data-award="2 Stars"><div class="map-pill-dot" style="background:#D4A843"></div>2 Stars</div>
+      <div class="map-pill active" data-award="1 Star"><div class="map-pill-dot" style="background:#C0394A"></div>1 Star</div>
+      <div class="map-pill active" data-award="Bib Gourmand"><div class="map-pill-dot" style="background:#5096DC"></div>Bib Gourmand</div>
+      <div class="map-pill active" data-award="Selected Restaurants"><div class="map-pill-dot" style="background:#9EA8B3"></div>Selected</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ SECTION 2 — CHOROPLETH (Scrollama) ══════════════════════════════════ -->
+<section id="section-choropleth" class="scrolly-outer">
+  <div class="scrolly-sticky-col">
+    <div id="choropleth-wrap">
+      <div id="choropleth-mode-label"></div>
+      <svg id="choropleth-svg"></svg>
+      <div id="choropleth-legend"></div>
+    </div>
+    <div id="choropleth-tooltip" class="vis-tooltip"></div>
+  </div>
+  <div class="scrolly-steps-col">
+    <div class="scroll-step" data-step="0" data-section="choropleth">
+      <p class="step-tag">02 — The Western Tilt</p>
+      <h3 class="step-heading">Europe Dominates.<br><em>Not Because It Eats Best.</em></h3>
+      <p class="step-body">
+        This map shows raw restaurant counts by country.
+        France alone has <strong>3,050 listings</strong> — more than all of South America,
+        Africa, and Oceania combined. The darker the country, the more restaurants.
+      </p>
+    </div>
+    <div class="scroll-step" data-step="1" data-section="choropleth">
+      <p class="step-tag">Adjust for population →</p>
+      <h3 class="step-heading">Belgium Beats China.<br><em>By a Lot.</em></h3>
+      <p class="step-body">
+        Switch to <strong>per-capita view</strong>: starred restaurants per million people.
+        The map inverts — small European nations glow brightest.
+        Belgium (11M pop.) outpaces China (1.4B pop.) by 180×.
+      </p>
+      <div class="step-annotation">
+        Belgium: 20.5 starred / million<br>
+        China mainland: 0.11 starred / million
+      </div>
+    </div>
+    <div class="scroll-step" data-step="2" data-section="choropleth">
+      <p class="step-tag">The timeline explains it →</p>
+      <h3 class="step-heading">107 Years of<br><em>European-Only Inspectors.</em></h3>
+      <p class="step-body">
+        Michelin launched in France in <strong>1900</strong>.
+        Japan: <strong>2007</strong>. South Korea: <strong>2016</strong>.
+        Southeast Asia: <strong>2017–18</strong>.
+        Decades of European-only inspectors set the definition of "fine dining"
+        before the rest of the world was ever evaluated.
+      </p>
+      <div class="step-annotation">
+        France: 1900 · Germany: 1966 · Japan: 2007<br>
+        China: 2016 · Thailand: 2017 · Brazil: 2015
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ SECTION 3 — BEESWARM (Scrollama) ══════════════════════════════════ -->
+<section id="section-beeswarm" class="scrolly-outer">
+  <div class="scrolly-sticky-col">
+    <div id="beeswarm-wrap">
+      <svg id="beeswarm-svg"></svg>
+    </div>
+    <div id="beeswarm-tooltip" class="vis-tooltip"></div>
+  </div>
+  <div class="scrolly-steps-col">
+    <div class="scroll-step" data-step="0" data-section="beeswarm">
+      <p class="step-tag">03 — Does Quality Cost Money?</p>
+      <h3 class="step-heading">Price vs. Stars:<br><em>The Beeswarm.</em></h3>
+      <p class="step-body">
+        Each dot is a restaurant. Left = cheapest price tier, right = most expensive.
+        Vertical position = award tier (top = 3 stars). Dots are colored by region.
+        Hover to explore.
+      </p>
+    </div>
+    <div class="scroll-step" data-step="1" data-section="beeswarm">
+      <p class="step-tag">Stars skew expensive →</p>
+      <h3 class="step-heading">3 Stars Almost Always<br><em>Means Max Price.</em></h3>
+      <p class="step-body">
+        Highlight <strong style="color:#FFD700">starred restaurants only</strong>.
+        They cluster overwhelmingly at the top price tier.
+        <strong>84% of 3-star restaurants</strong> sit at their currency's maximum price tier.
+      </p>
+      <div class="step-annotation">
+        3★ at max price: 88 of 105 (84%)<br>
+        1★ at max price: ~60% of total
+      </div>
+    </div>
+    <div class="scroll-step" data-step="2" data-section="beeswarm">
+      <p class="step-tag">Asia is the exception →</p>
+      <h3 class="step-heading">Cheap Stars<br><em>Only Exist in Asia.</em></h3>
+      <p class="step-body">
+        Highlight <strong style="color:#82BCEE">Asian restaurants</strong>.
+        They're the only place where 1-star and 2-star restaurants appear
+        at the cheapest price tiers. Singapore hawker stalls.
+        Tokyo ramen counters. A $10 bowl can earn a star. A $10 croque-monsieur in Paris cannot.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ SECTION 4 — BLANK SPOTS ══════════════════════════════════ -->
+<section id="section-blank">
+  <div class="blank-inner">
+    <div class="blank-header fade-in-up">
+      <p class="section-tag">04 — The Invisible World</p>
+      <h2 class="section-title">Where Michelin<br><em>Has Never Looked</em></h2>
+      <p class="section-desc">
+        Michelin covers ~45 of the world's 195 countries. The regions below
+        have little to zero presence — not because they lack exceptional food,
+        but because no inspectors have been sent.
+      </p>
+    </div>
+    <div id="blank-chart">
+      <div class="blank-header-row">
+        <span>Region</span><span>Coverage note</span><span>Listings</span>
+      </div>
+      <div id="blank-chart-rows"></div>
+    </div>
+    <p class="blank-note">
+      <strong>Ethiopia has 80+ distinct regional cuisines.</strong>
+      West Africa's jollof traditions stretch across a dozen nations.
+      Mexico's 31 states rival Europe's culinary diversity.
+      The guide doesn't call these places "not excellent" —
+      it simply <em>hasn't decided to look yet.</em>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ CLOSING ══════════════════════════════════ -->
+<section id="section-close">
+  <h2 class="close-title fade-in-up">The Map Is Not the Territory.<br><em>The Guide Is Not Gastronomy.</em></h2>
+  <p class="close-body fade-in-up">
+    The Michelin Guide is a remarkable dataset — but what it measures most clearly
+    is the history of a French company's expansion decisions. The restaurants it lists
+    are genuinely extraordinary. The restaurants it has never visited may be too.
+  </p>
+  <p class="close-source fade-in-up">Data: Kaggle — Michelin Guide Restaurants Dataset · Visualization by Sriya · 2026</p>
+</section>
+
+<div id="global-tip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script>
+<script src="https://unpkg.com/scrollama@3.2.0/build/scrollama.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
