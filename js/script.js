@@ -373,10 +373,10 @@
           </div>
           <input type="range" id="timeline-slider" min="${minY}" max="${maxY}" step="10" value="${minY}"
             style="width:100%;margin:8px 0;accent-color:var(--gold);cursor:pointer;">
-          <div style="display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:9px;color:var(--silver-dim);letter-spacing:0.1em;">
+          <div style="display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:11px;color:#F5EFE0;letter-spacing:0.1em;">
             <span>1900</span><span>2022</span>
           </div>
-          <div style="margin-top:8px;font-family:'Courier Prime',monospace;font-size:9px;color:var(--silver-dim);letter-spacing:0.1em;font-style:italic;">
+          <div style="margin-top:8px;font-family:'Courier Prime',monospace;font-size:11px;color:#F5EFE0;letter-spacing:0.1em;font-style:italic;">
             * launch years are approximate
           </div>
         </div>

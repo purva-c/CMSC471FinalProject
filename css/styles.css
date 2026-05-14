@@ -55,8 +55,8 @@ body {
   box-shadow: 0 0 0 2px var(--gold), 0 0 40px rgba(181,36,58,0.6);
 }
 .loading-text {
-  font-family: 'Courier Prime', monospace; font-size: 11px;
-  color: var(--gold-dim); letter-spacing: 0.3em; text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 12px;
+  color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase;
 }
 .loading-bar {
   width: 200px; height: 2px; background: rgba(201,168,76,0.15); border-radius: 2px; overflow: hidden;
@@ -91,8 +91,8 @@ body {
 .nav-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--cream); }
 .nav-links { display: flex; gap: 4px; }
 .nav-link {
-  font-family: 'Courier Prime', monospace; font-size: 10px;
-  letter-spacing: 0.2em; color: var(--silver-dim); text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 11px;
+  letter-spacing: 0.2em; color: var(--silver); text-transform: uppercase;
   padding: 5px 10px; border-radius: 3px; cursor: pointer;
   border: none; background: none; transition: all 0.15s;
 }
@@ -129,8 +129,8 @@ body {
   50% { box-shadow: 0 0 0 3px var(--gold), 0 0 70px rgba(181,36,58,0.9), 0 0 120px rgba(201,168,76,0.3); }
 }
 .hero-eyebrow {
-  font-family: 'Courier Prime', monospace; font-size: 11px;
-  letter-spacing: 0.35em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+  font-family: 'Courier Prime', monospace; font-size: 12px;
+  letter-spacing: 0.35em; color: var(--gold-light); text-transform: uppercase; margin-bottom: 16px;
   opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
 }
 .hero-title {
@@ -146,8 +146,8 @@ body {
   opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
 }
 .hero-founded {
-  font-family: 'Courier Prime', monospace; font-size: 12px;
-  color: var(--gold-dim); letter-spacing: 0.2em; margin-top: 20px;
+  font-family: 'Courier Prime', monospace; font-size: 13px;
+  color: var(--gold); letter-spacing: 0.2em; margin-top: 20px;
   opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
 }
 .hero-stats {
@@ -160,8 +160,8 @@ body {
   font-weight: 700; color: var(--gold-light); display: block;
 }
 .h-stat .l {
-  font-family: 'Courier Prime', monospace; font-size: 9px;
-  letter-spacing: 0.25em; color: var(--silver-dim); text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 10px;
+  letter-spacing: 0.25em; color: var(--silver); text-transform: uppercase;
 }
 .hero-scroll-hint {
   display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -169,8 +169,8 @@ body {
   opacity: 0; animation: fadeUp 0.9s 1.4s forwards;
 }
 .hero-scroll-hint span {
-  font-family: 'Courier Prime', monospace; font-size: 10px;
-  letter-spacing: 0.25em; color: var(--gold-dim); text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 11px;
+  letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase;
 }
 .scroll-arrow {
   width: 20px; height: 20px;
@@ -215,11 +215,11 @@ body {
 .map-pill {
   display: flex; align-items: center; gap: 6px; padding: 5px 12px;
   border-radius: 20px; border: 1px solid transparent; cursor: pointer;
-  font-family: 'Courier Prime', monospace; font-size: 10px; letter-spacing: 0.05em;
+  font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: 0.05em;
   transition: all 0.15s; user-select: none; color: var(--silver);
 }
 .map-pill.active { color: var(--cream); border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.1); }
-.map-pill.inactive { opacity: 0.35; }
+.map-pill.inactive { opacity: 0.4; }
 .map-pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
 /* Map hover card */
@@ -253,7 +253,7 @@ body {
 .hc-price {
   background: rgba(255,255,255,0.07);
   border-radius: 3px; padding: 1px 6px;
-  font-size: 10px; color: var(--silver);
+  font-size: 11px; color: var(--cream);
 }
 .hc-name {
   font-family: 'Playfair Display', serif;
@@ -262,16 +262,16 @@ body {
 }
 .hc-location {
   font-family: 'Courier Prime', monospace;
-  font-size: 10px; color: var(--silver-dim);
+  font-size: 11px; color: var(--cream);
   letter-spacing: 0.08em; margin-bottom: 6px;
 }
 .hc-cuisine {
-  font-size: 12px; color: var(--silver);
+  font-size: 13px; color: var(--cream);
   font-style: italic; margin-bottom: 10px; line-height: 1.4;
 }
 .hc-link {
   display: block;
-  font-family: 'Courier Prime', monospace; font-size: 10px;
+  font-family: 'Courier Prime', monospace; font-size: 11px;
   color: var(--gold); letter-spacing: 0.1em;
   text-decoration: none; border-top: 1px solid var(--border);
   padding-top: 8px; margin-top: 4px;
@@ -384,12 +384,12 @@ body {
 .legend-gradient-svg { display: block; border-radius: 3px; overflow: hidden; }
 .legend-ticks {
   display: flex; justify-content: space-between;
-  font-family: 'Courier Prime', monospace; font-size: 11px;
-  color: var(--silver); letter-spacing: 0.05em;
+  font-family: 'Courier Prime', monospace; font-size: 12px;
+  color: var(--cream); letter-spacing: 0.05em;
 }
 .legend-unit {
-  font-family: 'Courier Prime', monospace; font-size: 10px;
-  color: var(--gold-dim); letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 11px;
+  color: var(--cream); letter-spacing: 0.12em; text-transform: uppercase;
   margin-top: 4px;
 }
 .legend-seg { flex: 1; }
@@ -401,8 +401,8 @@ body {
   font-weight: 700; color: var(--gold-light); line-height: 1; min-width: 52px;
 }
 .timeline-year-label {
-  font-family: 'Courier Prime', monospace; font-size: 9px;
-  color: var(--silver-dim); letter-spacing: 0.15em; text-transform: uppercase;
+  font-family: 'Courier Prime', monospace; font-size: 10px;
+  color: var(--silver); letter-spacing: 0.15em; text-transform: uppercase;
 }
 
 /* Tooltip */
@@ -464,7 +464,7 @@ body {
 .blank-region-name { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--cream); }
 .blank-bar-bg { height: 12px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; }
 .blank-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
-.blank-bar-note { font-family: 'Courier Prime', monospace; font-size: 10px; color: var(--silver-dim); margin-top: 4px; letter-spacing: 0.05em; }
+.blank-bar-note { font-family: 'Courier Prime', monospace; font-size: 11px; color: var(--silver); margin-top: 4px; letter-spacing: 0.05em; }
 .blank-bar-count { font-family: 'Courier Prime', monospace; font-size: 13px; color: var(--silver); text-align: right; }
 .blank-note {
   max-width: 700px; margin: 40px auto 0;
@@ -494,7 +494,7 @@ body {
 }
 .close-source {
   margin-top: 48px; font-family: 'Courier Prime', monospace;
-  font-size: 10px; color: var(--gold-dim); letter-spacing: 0.2em; text-transform: uppercase;
+  font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase;
 }
 
 /* ══════════════════ GLOBAL TOOLTIP ══════════════════ */
