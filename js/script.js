@@ -64,6 +64,7 @@
   });
 
   const BLANK_SPOTS = [
+    { region: 'Europe (for comparison)',   total: 9500, note: 'Most comprehensive coverage',              color: '#C9A84C' },
     { region: 'Sub-Saharan Africa',        total: 0,   note: 'Zero coverage across 48+ countries',         color: '#6B8F5E' },
     { region: 'Central Asia',              total: 0,   note: 'Zero coverage',                              color: '#6B8F5E' },
     { region: 'Middle East (most)',         total: 23,  note: 'Only Dubai, Abu Dhabi, Tel Aviv covered',   color: '#D4A843' },
@@ -89,7 +90,7 @@
   // Award marker config
   const AWARD_CONFIG = {
     '3 Stars':              { color: '#FFD700', size: 10, z: 1000 },
-    '2 Stars':              { color: '#D4A843', size: 8,  z: 900  },
+    '2 Stars':              { color: '#FF8C00', size: 8,  z: 900  },
     '1 Star':               { color: '#C0394A', size: 7,  z: 800  },
     'Bib Gourmand':         { color: '#5096DC', size: 5,  z: 700  },
     'Selected Restaurants': { color: '#9EA8B3', size: 4,  z: 600  },
@@ -472,8 +473,8 @@
     const svgEl  = document.getElementById('beeswarm-svg');
     const wrap   = document.getElementById('beeswarm-wrap');
     const W = wrap.clientWidth || 460;
-    const H = 400;
-    const MARGIN = { top: 50, right: 20, bottom: 50, left: 20 };
+    const H = 450;
+    const MARGIN = { top: 50, right: 20, bottom: 70, left: 80 };
     const iW = W - MARGIN.left - MARGIN.right;
     const iH = H - MARGIN.top  - MARGIN.bottom;
 
@@ -512,7 +513,7 @@
     for (let i = 0; i < 120; i++) simulation.tick();
 
     // X axis labels
-    const tierLabels = ['', '$ cheapest', '$$', '$$$', '$$$$ priciest'];
+    const tierLabels = ['', '$', '$$', '$$$', '$$$$'];
     g.append('g').attr('class', 'x-axis')
       .selectAll('text')
       .data([1,2,3,4]).enter()
@@ -521,8 +522,8 @@
         .attr('y', iH + 30)
         .attr('text-anchor', 'middle')
         .attr('font-family', "'Courier Prime', monospace")
-        .attr('font-size', 10)
-        .attr('fill', '#5A6470')
+        .attr('font-size', 12)
+        .attr('fill', '#9EA8B3')
         .attr('letter-spacing', '0.1em')
         .text(d => tierLabels[d]);
 
@@ -536,8 +537,8 @@
         .attr('text-anchor', 'end')
         .attr('dominant-baseline', 'middle')
         .attr('font-family', "'Courier Prime', monospace")
-        .attr('font-size', 9)
-        .attr('fill', d => AWARD_COLORS[d])
+        .attr('font-size', 11)
+        .attr('fill', '#F5EFE0')
         .attr('letter-spacing', '0.05em')
         .text(d => d.toUpperCase());
 
@@ -568,6 +569,42 @@
             event);
         })
         .on('mouseleave', () => hideTip(tip));
+
+    // Add legend for region colors
+    const LEGEND_DATA = [
+      { region: 'Europe', color: '#C9A84C' },
+      { region: 'Asia', color: '#82BCEE' },
+      { region: 'Americas', color: '#E07080' },
+      { region: 'Other', color: '#9EA8B3' }
+    ];
+    
+    const legendG = svg.append('g')
+      .attr('class', 'region-legend')
+      .attr('transform', `translate(${MARGIN.left + 50}, ${H - 5})`);
+    
+    LEGEND_DATA.forEach((d, i) => {
+      const startX = i * 90;
+      
+      legendG.append('circle')
+        .attr('cx', startX + 5)
+        .attr('cy', 0)
+        .attr('r', 4)
+        .attr('fill', d.color)
+        .attr('fill-opacity', 0.75);
+      
+      legendG.append('text')
+        .attr('x', startX + 14)
+        .attr('y', 0)
+        .attr('dominant-baseline', 'middle')
+        .attr('font-family', "'Courier Prime', monospace")
+        .attr('font-size', 11)
+        .attr('fill', '#9EA8B3')
+        .attr('letter-spacing', '0.05em')
+        .text(d.region);
+    });
+    
+    // Store legend reference globally
+    window.beeswarmLegend = legendG;
 
     beeswarmReady = true;
     updateBeeswarm(0);
@@ -607,8 +644,8 @@
   function getRegionFromLocation(location) {
     if (!location) return 'Other';
     const l = location.toLowerCase();
-    const ASIA_KEYWORDS = ['japan','china','korea','singapore','hong kong','taiwan','thailand','vietnam','malaysia','macau','philippines','indonesia'];
-    const EUR_KEYWORDS  = ['france','italy','spain','germany','uk','united kingdom','belgium','switzerland','netherlands','austria','portugal','denmark','sweden','norway','finland','ireland'];
+    const ASIA_KEYWORDS = ['japan','china','chinese','mainland','korea','singapore','hong kong','taiwan','thailand','vietnam','malaysia','macau','philippines','indonesia','beijing','shanghai','guangzhou','shenzhen'];
+    const EUR_KEYWORDS  = ['france','italy','spain','germany','uk','united kingdom','belgium','switzerland','netherlands','austria','portugal','denmark','sweden','norway','finland','ireland','greece','croatia','poland','czech','hungary','romania','turkey','türkiye'];
     const AME_KEYWORDS  = ['usa','united states','mexico','brazil','canada','colombia','peru','argentina','chile'];
     if (ASIA_KEYWORDS.some(k => l.includes(k))) return 'Asia';
     if (EUR_KEYWORDS.some(k => l.includes(k)))  return 'Europe';
@@ -624,14 +661,21 @@
     if (!beeswarmReady || !beeswarmDots) return;
     beeswarmStep = step;
 
+    // Toggle legend visibility: only show on step 0
+    if (window.beeswarmLegend) {
+      window.beeswarmLegend
+        .transition().duration(300)
+        .style('opacity', step === 0 ? 1 : 0);
+    }
+
     beeswarmDots
       .transition().duration(500).ease(d3.easeCubicInOut)
       .attr('fill', d => {
         if (step === 0) return getRegionColor(d.region);
         if (step === 1) {
-          // Highlight starred, grey out Bib
+          // Highlight starred in yellow, grey out Bib
           const isStarred = d.award === '3 Stars' || d.award === '2 Stars' || d.award === '1 Star';
-          return isStarred ? { '3 Stars':'#FFD700','2 Stars':'#D4A843','1 Star':'#C0394A' }[d.award] : 'rgba(90,100,112,0.25)';
+          return isStarred ? '#FFD700' : 'rgba(158,168,179,0.6)';
         }
         if (step === 2) {
           // Highlight Asia, grey out rest
@@ -641,7 +685,7 @@
       })
       .attr('fill-opacity', d => {
         if (step === 0) return 0.75;
-        if (step === 1) return (d.award !== 'Bib Gourmand') ? 0.85 : 0.15;
+        if (step === 1) return (d.award !== 'Bib Gourmand') ? 0.85 : 0.35;
         if (step === 2) return d.region === 'Asia' ? 0.9 : 0.12;
         return 0.75;
       })
@@ -657,15 +701,17 @@
   function buildBlankChart() {
     const container = document.getElementById('blank-chart-rows');
     if (!container) return;
-    const maxVal = 200;
+    const maxVal = 10000;
 
-    container.innerHTML = BLANK_SPOTS.map(d => {
+    container.innerHTML = BLANK_SPOTS.map((d, idx) => {
       const pct = d.total === 0 ? 0 : Math.max(2, (d.total / maxVal) * 100);
       const countLabel = d.total === 0
         ? `<span style="color:#6B8F5E;font-family:'Courier Prime',monospace;font-size:10px;letter-spacing:0.15em">ZERO</span>`
         : d.total;
+      const isEurope = idx === 0;
+      const separatorClass = isEurope ? ' style="border-bottom: 2px solid rgba(201,168,76,0.3); margin-bottom: 8px; padding-bottom: 14px;"' : '';
       return `
-        <div class="blank-region-row" style="transition-delay:${BLANK_SPOTS.indexOf(d) * 80}ms">
+        <div class="blank-region-row"${separatorClass} style="transition-delay:${idx * 80}ms">
           <span class="blank-region-name">${d.region}</span>
           <div class="blank-bar-wrap">
             <div class="blank-bar-bg">
