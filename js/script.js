@@ -35,6 +35,27 @@
     { country: 'Vietnam',          iso: 'VNM', total: 177,  stars3: 0,  stars2: 0,   stars1: 9,   pop: 98,   continent: 'Asia',     launched: 2018 },
     { country: 'Malaysia',         iso: 'MYS', total: 149,  stars3: 0,  stars2: 1,   stars1: 8,   pop: 33,   continent: 'Asia',     launched: 2019 },
     { country: 'Türkiye',          iso: 'TUR', total: 168,  stars3: 0,  stars2: 2,   stars1: 15,  pop: 85,   continent: 'Europe',   launched: 2022 },
+    // Additional European countries with Michelin coverage
+    { country: 'Denmark',          iso: 'DNK', total: 143,  stars3: 2,  stars2: 7,   stars1: 28,  pop: 6,    continent: 'Europe',   launched: 1990 },
+    { country: 'Sweden',           iso: 'SWE', total: 118,  stars3: 1,  stars2: 6,   stars1: 28,  pop: 10,   continent: 'Europe',   launched: 2005 },
+    { country: 'Norway',           iso: 'NOR', total: 87,   stars3: 0,  stars2: 4,   stars1: 15,  pop: 5,    continent: 'Europe',   launched: 2016 },
+    { country: 'Ireland',          iso: 'IRL', total: 212,  stars3: 0,  stars2: 2,   stars1: 19,  pop: 5,    continent: 'Europe',   launched: 1974 },
+    { country: 'Greece',           iso: 'GRC', total: 123,  stars3: 0,  stars2: 2,   stars1: 11,  pop: 11,   continent: 'Europe',   launched: 2023 },
+    { country: 'Czech Republic',   iso: 'CZE', total: 18,   stars3: 0,  stars2: 0,   stars1: 5,   pop: 11,   continent: 'Europe',   launched: 2021 },
+    { country: 'Poland',           iso: 'POL', total: 14,   stars3: 0,  stars2: 0,   stars1: 4,   pop: 38,   continent: 'Europe',   launched: 2022 },
+    { country: 'Luxembourg',       iso: 'LUX', total: 64,   stars3: 1,  stars2: 5,   stars1: 15,  pop: 0.65, continent: 'Europe',   launched: 1910 },
+    // Middle East
+    { country: 'UAE',              iso: 'ARE', total: 179,  stars3: 0,  stars2: 3,   stars1: 14,  pop: 10,   continent: 'Other',    launched: 2022 },
+    { country: 'Israel',           iso: 'ISR', total: 93,   stars3: 0,  stars2: 1,   stars1: 9,   pop: 9,    continent: 'Other',    launched: 2023 },
+    // Americas
+    { country: 'Colombia',         iso: 'COL', total: 28,   stars3: 0,  stars2: 0,   stars1: 2,   pop: 51,   continent: 'Americas', launched: 2023 },
+    { country: 'Peru',             iso: 'PER', total: 14,   stars3: 0,  stars2: 0,   stars1: 1,   pop: 33,   continent: 'Americas', launched: 2023 },
+    { country: 'Croatia',          iso: 'HRV', total: 31,   stars3: 0,  stars2: 1,   stars1: 6,   pop: 4,    continent: 'Europe',   launched: 2022 },
+    { country: 'Hungary',          iso: 'HUN', total: 24,   stars3: 0,  stars2: 1,   stars1: 5,   pop: 10,   continent: 'Europe',   launched: 2022 },
+    { country: 'Romania',          iso: 'ROU', total: 8,    stars3: 0,  stars2: 0,   stars1: 2,   pop: 19,   continent: 'Europe',   launched: 2023 },
+    { country: 'Finland',          iso: 'FIN', total: 42,   stars3: 0,  stars2: 3,   stars1: 10,  pop: 5.5,  continent: 'Europe',   launched: 2018 },
+    { country: 'Slovakia',         iso: 'SVK', total: 6,    stars3: 0,  stars2: 0,   stars1: 1,   pop: 5.5,  continent: 'Europe',   launched: 2023 },
+    { country: 'Slovenia',         iso: 'SVN', total: 14,   stars3: 0,  stars2: 1,   stars1: 3,   pop: 2,    continent: 'Europe',   launched: 2020 },
   ];
 
   COUNTRY_DATA.forEach(d => {
@@ -165,12 +186,52 @@
         const n = c.getChildCount();
         const sz = n > 1000 ? 40 : n > 100 ? 34 : 28;
         return L.divIcon({
-          html: `<div class="marker-cluster" style="width:${sz}px;height:${sz}px;font-size:${n>999?10:11}px"><div><span>${n>999?Math.round(n/1000)+'k':n}</span></div></div>`,
+          html: `<div class="marker-cluster" style="width:${sz}px;height:${sz}px;font-size:${n>999?10:11}px;display:flex;align-items:center;justify-content:center;line-height:1;">${n>999?Math.round(n/1000)+'k':n}</div>`,
           className: '', iconSize: [sz, sz],
         });
       },
     });
     mapInstance.addLayer(clusterLayer);
+  }
+
+  const hoverCard = document.getElementById('map-hover-card');
+
+  function showHoverCard(d, e) {
+    const cfg = AWARD_CONFIG[d.award] || AWARD_CONFIG['Selected Restaurants'];
+    const stars = d.award === '3 Stars' ? '★★★' : d.award === '2 Stars' ? '★★' : d.award === '1 Star' ? '★' : '';
+    const priceHtml = d.price ? `<span class="hc-price">${escHtml(d.price)}</span>` : '';
+    const cuisineHtml = d.cuisine ? `<div class="hc-cuisine">${escHtml(d.cuisine.split(',').slice(0,3).join(', '))}</div>` : '';
+    const linkHtml = d.url
+      ? `<a class="hc-link" href="${escHtml(d.url)}" target="_blank" rel="noopener">View on Michelin Guide ↗</a>`
+      : '';
+    hoverCard.innerHTML = `
+      <div class="hc-award" style="color:${cfg.color}">
+        ${stars ? `<span class="hc-stars">${stars}</span>` : ''}
+        <span class="hc-award-label">${escHtml(d.award)}</span>
+        ${priceHtml}
+      </div>
+      <div class="hc-name">${escHtml(d.name)}</div>
+      <div class="hc-location">${escHtml(d.location)}</div>
+      ${cuisineHtml}
+      ${linkHtml}
+    `;
+    hoverCard.classList.add('visible');
+    if (e) positionHoverCard(e);
+  }
+
+  function positionHoverCard(e) {
+    const W = hoverCard.offsetWidth || 260;
+    const H = hoverCard.offsetHeight || 120;
+    let x = e.clientX + 12;
+    let y = e.clientY - H - 12;
+    if (x + W > window.innerWidth - 8) x = e.clientX - W - 12;
+    if (y < 8) y = e.clientY + 16;
+    hoverCard.style.left = x + 'px';
+    hoverCard.style.top  = y + 'px';
+  }
+
+  function hideHoverCard() {
+    hoverCard.classList.remove('visible');
   }
 
   function makeMarker(d) {
@@ -181,13 +242,12 @@
       iconSize: [cfg.size, cfg.size], iconAnchor: [cfg.size/2, cfg.size/2],
     });
     const marker = L.marker([+d.lat, +d.lng], { icon, zIndexOffset: cfg.z });
-    const stars = d.award === '3 Stars' ? '★★★' : d.award === '2 Stars' ? '★★' : d.award === '1 Star' ? '★' : '';
-    marker.bindPopup(`
-      <div class="popup-name">${escHtml(d.name)}</div>
-      <div class="popup-award" style="color:${cfg.color}">${stars} ${escHtml(d.award)}</div>
-      <div class="popup-loc">${escHtml(d.location)}</div>
-      ${d.cuisine ? `<div style="font-size:11px;color:#9EA8B3;margin-top:4px;font-style:italic">${escHtml(d.cuisine)}</div>` : ''}
-    `, { maxWidth: 260 });
+    marker.on('mouseover', (e) => showHoverCard(d, e.originalEvent));
+    marker.on('mousemove', (e) => positionHoverCard(e.originalEvent));
+    marker.on('mouseout',  () => hideHoverCard());
+    if (d.url) {
+      marker.on('click', () => window.open(d.url, '_blank', 'noopener'));
+    }
     return marker;
   }
 
@@ -266,19 +326,27 @@
       .attr('stroke-width', 0.5);
 
     choroplethReady = true;
-    updateChoropleth(0); // draw initial state
+    updateChoropleth(0);
   }
 
-  // Numeric ISO 3166-1 → ISO3 (partial lookup for countries in our dataset)
+  // Numeric ISO 3166-1 → ISO3 — only countries present in COUNTRY_DATA
   const NUMERIC_TO_ISO3 = {
     '250':'FRA','380':'ITA','840':'USA','724':'ESP','276':'DEU','826':'GBR',
     '392':'JPN','156':'CHN','56':'BEL','756':'CHE','528':'NLD','764':'THA',
     '158':'TWN','40':'AUT','702':'SGP','124':'CAN','410':'KOR','344':'HKG',
     '620':'PRT','484':'MEX','76':'BRA','704':'VNM','458':'MYS','792':'TUR',
+    '208':'DNK','752':'SWE','578':'NOR','372':'IRL','300':'GRC',
+    '203':'CZE','616':'POL','442':'LUX',
+    '784':'ARE','376':'ISR',
+    '170':'COL','604':'PER',
+    '191':'HRV','348':'HUN','642':'ROU','246':'FIN','703':'SVK','705':'SVN',
+    '56':'BEL','528':'NLD','756':'CHE',
   };
 
   function getISO3(numericId) {
-    return NUMERIC_TO_ISO3[String(numericId)] || null;
+    // Parse as base-10 integer to strip any leading zeros, then look up
+    const key = String(parseInt(numericId, 10));
+    return NUMERIC_TO_ISO3[key] || null;
   }
 
   function updateChoropleth(step) {
@@ -290,48 +358,108 @@
     const label = document.getElementById('choropleth-mode-label');
     const legendEl = document.getElementById('choropleth-legend');
 
-    let colorScale, getValue, labelText, legendColors;
+    // ── Step 2: interactive slider ──────────────────
+    if (step === 2) {
+      if (window._timelineTimer) { clearInterval(window._timelineTimer); window._timelineTimer = null; }
+      const minY = 1900, maxY = 2022;
+
+      label.textContent = 'When Michelin first arrived';
+      legendEl.innerHTML = `
+        <div class="legend-track">
+          <div class="timeline-year-display">
+            <span class="timeline-year-num" id="timeline-year-num">1900</span>
+            <span class="timeline-year-label" id="timeline-year-label">drag to explore</span>
+          </div>
+          <input type="range" id="timeline-slider" min="${minY}" max="${maxY}" step="10" value="${minY}"
+            style="width:100%;margin:8px 0;accent-color:var(--gold);cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:9px;color:var(--silver-dim);letter-spacing:0.1em;">
+            <span>1900</span><span>2022</span>
+          </div>
+          <div style="margin-top:8px;font-family:'Courier Prime',monospace;font-size:9px;color:var(--silver-dim);letter-spacing:0.1em;font-style:italic;">
+            * launch years are approximate
+          </div>
+        </div>
+      `;
+
+      svg.selectAll('.country-path').attr('fill', '#2a1e0a');
+
+      function renderYear(year) {
+        document.getElementById('timeline-year-num').textContent = year;
+        document.getElementById('timeline-year-label').textContent =
+          year >= maxY ? 'all covered countries shown' : 'drag to explore';
+        svg.selectAll('.country-path')
+          .transition().duration(150).ease(d3.easeCubicOut)
+          .attr('fill', function(d) {
+            const cData = ISO_MAP[getISO3(d.id)];
+            return (cData && cData.launched <= year) ? '#FFFFFF' : '#2a1e0a';
+          });
+      }
+
+      renderYear(minY);
+      setTimeout(() => {
+        const slider = document.getElementById('timeline-slider');
+        if (slider) slider.addEventListener('input', () => renderYear(+slider.value));
+      }, 50);
+      return;
+    }
+
+    // ── Steps 0 & 1: choropleth with labeled legend ──
+    let colorScale, getValue, labelText, legendConfig;
 
     if (step === 0) {
-      // Raw counts
-      const max = d3.max(COUNTRY_DATA, d => d.total);
-      colorScale = d3.scaleSequential(d3.interpolate('#2a1e0a', '#C9A84C')).domain([0, max]);
-      getValue = d => d.total;
-      labelText = 'TOTAL MICHELIN LISTINGS BY COUNTRY';
-      legendColors = ['#2a1e0a','#6B4E1A','#A8782A','#C9A84C'];
-    } else if (step === 1) {
-      // Per capita (starred only)
-      const max = d3.max(COUNTRY_DATA, d => d.perMillion);
-      colorScale = d3.scaleSequential(d3.interpolate('#2a1e0a', '#E07080')).domain([0, max]);
-      getValue = d => d.perMillion;
-      labelText = 'STARRED RESTAURANTS PER MILLION PEOPLE';
-      legendColors = ['#2a1e0a','#6B2030','#A83050','#E07080'];
+      const cap = 3000;
+      colorScale = d3.scaleSequential(d3.interpolate('#2a1e0a', '#FFFFFF')).domain([0, cap]);
+      getValue = d => Math.min(d.total, cap);
+      labelText = 'Total Michelin listings by country';
+      legendConfig = {
+        stops: ['#2a1e0a', '#7A6030', '#C9A84C', '#FFFFFF'],
+        min: '0', mid: '1,500', max: '3,000+',
+        unit: 'number of restaurants  (lighter = more)',
+      };
     } else {
-      // Launch year — highlight late-entry countries
-      // Earlier = more established = darker gold, later = bright blue
-      const minY = 1900, maxY = 2022;
-      colorScale = d3.scaleSequential(d3.interpolate('#C9A84C', '#82BCEE')).domain([minY, maxY]);
-      getValue = d => d.launched;
-      labelText = 'YEAR MICHELIN FIRST COVERED THIS COUNTRY';
-      legendColors = ['#C9A84C','#A08070','#7090A0','#82BCEE'];
+      const vals = COUNTRY_DATA.map(d => d.perMillion).sort((a, b) => a - b);
+      const cap  = vals[Math.floor(vals.length * 0.90)];
+      colorScale = d3.scaleSequential(d3.interpolate('#2a1e0a', '#FFB0C0')).domain([0, cap]);
+      getValue = d => Math.min(d.perMillion, cap);
+      labelText = 'Starred restaurants per million people';
+      legendConfig = {
+        stops: ['#2a1e0a', '#7B2535', '#D05068', '#FFB0C0'],
+        min: '0', mid: (cap / 2).toFixed(1), max: cap.toFixed(1) + '+',
+        unit: 'starred restaurants per million people  (lighter = more)',
+      };
     }
 
     label.textContent = labelText;
 
-    // Update fill
     svg.selectAll('.country-path')
       .transition().duration(700).ease(d3.easeCubicInOut)
       .attr('fill', function(d) {
-        const iso3 = getISO3(d.id);
-        const cData = ISO_MAP[iso3];
+        const cData = ISO_MAP[getISO3(d.id)];
         if (!cData) return '#2a1e0a';
         return colorScale(getValue(cData));
       });
 
-    // Legend gradient
-    legendEl.innerHTML = legendColors.map(c =>
-      `<div class="legend-seg" style="background:${c}"></div>`
-    ).join('');
+    const gradientId = `choro-grad-${step}`;
+    legendEl.innerHTML = `
+      <div class="legend-track">
+        <svg class="legend-gradient-svg" width="100%" height="10">
+          <defs>
+            <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="100%" y2="0%">
+              ${legendConfig.stops.map((c, i) =>
+                `<stop offset="${(i / (legendConfig.stops.length - 1) * 100).toFixed(0)}%" stop-color="${c}"/>`
+              ).join('')}
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="10" rx="3" fill="url(#${gradientId})"/>
+        </svg>
+        <div class="legend-ticks">
+          <span>${legendConfig.min}</span>
+          <span>${legendConfig.mid}</span>
+          <span>${legendConfig.max}</span>
+        </div>
+        <div class="legend-unit">${legendConfig.unit}</div>
+      </div>
+    `;
   }
 
   // ────────────────────────────────────────────────
@@ -574,6 +702,15 @@
       .onStepEnter(({ element, index }) => {
         document.querySelectorAll('#section-choropleth .scroll-step').forEach(el => el.classList.remove('is-active'));
         element.classList.add('is-active');
+        if (index !== 2 && window._timelineTimer) {
+          clearInterval(window._timelineTimer);
+          window._timelineTimer = null;
+        }
+        if (index !== 2 && window._timelineScrollHandler) {
+          window.removeEventListener('scroll', window._timelineScrollHandler);
+          window._timelineScrollHandler = null;
+          window._timelineDecade = 0;
+        }
         updateChoropleth(index);
       });
 
@@ -621,6 +758,7 @@
           cuisine:  row['Cuisine'],
           price:    row['Price'],
           award:    row['Award'],
+          url:      row['Url'] || row['WebsiteUrl'] || '',
           lat, lng,
         });
       }

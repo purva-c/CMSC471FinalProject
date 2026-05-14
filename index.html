@@ -13,7 +13,7 @@
 
 <!-- ─── LOADING OVERLAY ─── -->
 <div id="loading-overlay">
-  <div class="loading-badge">M</div>
+  <img class="loading-badge" src="data/michelin_logo.png" alt="Michelin">
   <span class="loading-text">Loading restaurant data…</span>
   <div class="loading-bar"><div class="loading-bar-fill" id="loading-progress"></div></div>
 </div>
@@ -21,7 +21,7 @@
 <!-- ─── STICKY NAV ─── -->
 <nav id="nav">
   <div class="nav-logo">
-    <div class="nav-badge">M</div>
+    <img class="nav-badge" src="data/michelin_logo.png" alt="Michelin">
     <span class="nav-title">Geography of Taste</span>
   </div>
   <div class="nav-links">
@@ -34,7 +34,7 @@
 
 <!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
 <section id="hero">
-  <div class="michelin-badge-hero">M</div>
+  <img class="michelin-badge-hero" src="data/michelin_logo.png" alt="Michelin">
   <p class="hero-eyebrow">An Interactive Essay · Michelin Guide Data</p>
   <h1 class="hero-title">
     A French Tire Company<br>
@@ -69,6 +69,7 @@
   </div>
   <div id="map-wrap">
     <div id="map"></div>
+    <div id="map-hover-card"></div>
     <div id="map-controls">
       <div class="map-pill active" data-award="3 Stars"><div class="map-pill-dot" style="background:#FFD700;box-shadow:0 0 5px #FFD700"></div>3 Stars</div>
       <div class="map-pill active" data-award="2 Stars"><div class="map-pill-dot" style="background:#D4A843"></div>2 Stars</div>
@@ -96,7 +97,7 @@
       <p class="step-body">
         This map shows raw restaurant counts by country.
         France alone has <strong>3,050 listings</strong> — more than all of South America,
-        Africa, and Oceania combined. The darker the country, the more restaurants.
+        Africa, and Oceania combined. The lighter the country, the more restaurants.
       </p>
     </div>
     <div class="scroll-step" data-step="1" data-section="choropleth">
